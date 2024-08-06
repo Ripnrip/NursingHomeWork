@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dermatology Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .quiz-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 100%;
+            margin: 20px;
+        }
+        .quiz-title {
+            text-align: center;
+            color: #333;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .options {
+            display: grid;
+            gap: 10px;
+        }
+        button {
+            padding: 10px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #cccccc;
+        }
+        .correct {
+            background-color: #28a745;
+        }
+        .incorrect {
+            background-color: #dc3545;
+        }
+        .result {
+            text-align: center;
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="quiz-container" class="quiz-container">
+        <h1 class="quiz-title">Dermatology Quiz</h1>
+        <div id="quiz-content"></div>
+    </div>
+
+    <script>
+        const quizQuestions = [
+            {
+                question: "What is the term for a flat, colored spot on the skin that is less than 1 cm in diameter?",
+                options: ["Macule", "Papule", "Nodule", "Plaque"],
+                correctAnswer: "Macule"
+            },
+            {
+                question: "Which of the following is NOT a primary skin lesion?",
+                options: ["Macule", "Papule", "Vesicle", "Scale"],
+                correctAnswer: "Scale"
+            },
+            {
+                question: "What is the most common type of skin cancer?",
+                options: ["Melanoma", "Basal Cell Carcinoma", "Squamous Cell Carcinoma", "Merkel Cell Carcinoma"],
+                correctAnswer: "Basal Cell Carcinoma"
+            },
+            {
+                question: "Which of the following is a risk factor for developing malignant melanoma?",
+                options: ["Dark skin", "No history of sunburns", "Multiple dysplastic nevi", "Regular use of sunscreen"],
+                correctAnswer: "Multiple dysplastic nevi"
+            },
+            {
+                question: "What is the term for excessive itching of the skin?",
+                options: ["Pruritus", "Erythema", "Ecchymosis", "Petechiae"],
+                correctAnswer: "Pruritus"
+            },
+            {
+                question: "Which of the following is NOT a type of psoriasis?",
+                options: ["Plaque psoriasis", "Guttate psoriasis", "Inverse psoriasis", "Macular psoriasis"],
+                correctAnswer: "Macular psoriasis"
+            },
+            {
+                question: "What is the most common cause of candidiasis infections?",
+                options: ["Candida albicans", "Aspergillus fumigatus", "Trichophyton rubrum", "Malassezia furfur"],
+                correctAnswer: "Candida albicans"
+            },
+            {
+                question: "Which of the following is NOT a risk factor for developing atopic dermatitis?",
+                options: ["Family history of allergies", "Living in an urban area", "Having a dog as a pet", "Exposure to air pollution"],
+                correctAnswer: "Having a dog as a pet"
+            },
+            {
+                question: "What is the term for a raised, solid lesion that is less than 1 cm in diameter?",
+                options: ["Macule", "Papule", "Nodule", "Plaque"],
+                correctAnswer: "Papule"
+            },
+            {
+                question: "Which of the following is a characteristic of basal cell carcinoma?",
+                options: ["Rapid growth", "High metastatic potential", "Commonly found on sun-exposed areas", "Primarily affects dark-skinned individuals"],
+                correctAnswer: "Commonly found on sun-exposed areas"
+            },
+            {
+                question: "What is the first-line treatment for most uncomplicated abscesses?",
+                options: ["Oral antibiotics", "Topical antibiotics", "Incision and drainage", "Warm compresses"],
+                correctAnswer: "Incision and drainage"
+            },
+            {
+                question: "Which of the following is NOT a typical location for seborrheic dermatitis?",
+                options: ["Scalp", "Eyebrows", "Palms", "Nasolabial folds"],
+                correctAnswer: "Palms"
+            },
+            {
+                question: "What is the term for a fluid-filled lesion that is less than 5 mm in diameter?",
+                options: ["Macule", "Papule", "Vesicle", "Bulla"],
+                correctAnswer: "Vesicle"
+            },
+            {
+                question: "Which of the following is a characteristic of actinic keratosis?",
+                options: ["Soft, fleshy growths", "Pearly, translucent appearance", "Rough, scaly patches", "Deep, punched-out ulcers"],
+                correctAnswer: "Rough, scaly patches"
+            },
+            {
+                question: "What is the most common causative agent of impetigo?",
+                options: ["Staphylococcus aureus", "Streptococcus pyogenes", "Pseudomonas aeruginosa", "Candida albicans"],
+                correctAnswer: "Staphylococcus aureus"
+            },
+            {
+                question: "Which of the following is NOT a typical manifestation of rosacea?",
+                options: ["Facial flushing", "Telangiectasia", "Pustules", "Scaling"],
+                correctAnswer: "Scaling"
+            },
+            {
+                question: "What is the term for a circumscribed area of skin discoloration larger than 1 cm in diameter?",
+                options: ["Macule", "Patch", "Plaque", "Wheal"],
+                correctAnswer: "Patch"
+            },
+            {
+                question: "Which of the following is a characteristic of squamous cell carcinoma?",
+                options: ["Slow growth", "Rarely metastasizes", "Often begins as actinic keratosis", "Primarily affects young adults"],
+                correctAnswer: "Often begins as actinic keratosis"
+            },
+            {
+                question: "What is the most common type of psoriasis?",
+                options: ["Guttate psoriasis", "Inverse psoriasis", "Plaque psoriasis", "Pustular psoriasis"],
+                correctAnswer: "Plaque psoriasis"
+            },
+            {
+                question: "Which of the following is NOT a typical trigger for atopic dermatitis flares?",
+                options: ["Stress", "Dry skin", "Hot showers", "Increased humidity"],
+                correctAnswer: "Increased humidity"
+            },
+            {
+                question: "What is the term for a raised, fluid-filled lesion that is larger than 5 mm in diameter?",
+                options: ["Vesicle", "Bulla", "Pustule", "Wheal"],
+                correctAnswer: "Bulla"
+            },
+            {
+                question: "Which of the following is a characteristic of seborrheic keratosis?",
+                options: ["Rapid growth", "Smooth surface", "'Stuck-on' appearance", "Primarily affects young adults"],
+                correctAnswer: "'Stuck-on' appearance"
+            },
+            {
+                question: "What is the most common location for melanoma in men?",
+                options: ["Face", "Trunk", "Arms", "Legs"],
+                correctAnswer: "Trunk"
+            },
+            {
+                question: "Which of the following is NOT a typical manifestation of contact dermatitis?",
+                options: ["Erythema", "Vesicles", "Scaling", "Purpura"],
+                correctAnswer: "Purpura"
+            },
+            {
+                question: "What is the term for a circumscribed, elevated, solid lesion larger than 1 cm in diameter?",
+                options: ["Papule", "Nodule", "Plaque", "Wheal"],
+                correctAnswer: "Plaque"
+            },
+            {
+                question: "Which of the following is a risk factor for developing basal cell carcinoma?",
+                options: ["Dark skin", "Young age", "Limited sun exposure", "History of radiation therapy"],
+                correctAnswer: "History of radiation therapy"
+            },
+            {
+                question: "What is the most common type of fungal infection affecting the skin?",
+                options: ["Candidiasis", "Tinea corporis", "Pityriasis versicolor", "Onychomycosis"],
+                correctAnswer: "Tinea corporis"
+            },
+            {
+                question: "Which of the following is NOT a typical location for psoriasis?",
+                options: ["Elbows", "Knees", "Scalp", "Palms"],
+                correctAnswer: "Palms"
+            },
+            {
+                question: "What is the term for a pus-filled lesion?",
+                options: ["Vesicle", "Bulla", "Pustule", "Wheal"],
+                correctAnswer: "Pustule"
+            },
+            {
+                question: "Which of the following is a characteristic of pityriasis rosea?",
+                options: ["Chronic course", "Starts with multiple lesions", "Herald patch", "Primarily affects older adults"],
+                correctAnswer: "Herald patch"
+            },
+            {
+                question: "What is the most common location for melanoma in women?",
+                options: ["Face", "Trunk", "Arms", "Legs"],
+                correctAnswer: "Legs"
+            },
+            {
+                question: "Which of the following is NOT a typical manifestation of urticaria (hives)?",
+                options: ["Pruritus", "Wheals", "Rapid onset", "Scaling"],
+                correctAnswer: "Scaling"
+            },
+            {
+                question: "What is the term for a linear break in the skin?",
+                options: ["Erosion", "Excoriation", "Fissure", "Ulcer"],
+                correctAnswer: "Fissure"
+            },
+            {
+                question: "Which of the following is a characteristic of acne vulgaris?",
+                options: ["Primarily affects older adults", "Caused by fungal infection", "Presence of comedones", "Typically occurs on sun-exposed areas"],
+                correctAnswer: "Presence of comedones"
+            },
+            {
+                question: "What is the most common type of hair loss?",
+                options: ["Alopecia areata", "Telogen effluvium", "Androgenetic alopecia", "Trichotillomania"],
+                correctAnswer: "Androgenetic alopecia"
+            },
+            {
+                question: "Which of the following is NOT a typical manifestation of cellulitis?",
+                options: ["Erythema", "Warmth", "Pain", "Vesicles"],
+                correctAnswer: "Vesicles"
+            },
+            {
+                question: "What is the term for thickening of the skin with accentuated skin markings?",
+                options: ["Atrophy", "Lichenification", "Induration", "Maceration"],
+                correctAnswer: "Lichenification"
+            },
+            {
+                question: "Which of the following is a characteristic of tinea versicolor?",
+                options: ["Primarily affects the face", "Caused by dermatophytes", "Hyperpigmented or hypopigmented patches", "Typically occurs in older adults"],
+                correctAnswer: "Hyperpigmented or hypopigmented patches"
+            },
+            {
+                question: "What is the most common location for basal cell carcinoma?",
+                options: ["Scalp", "Nose", "Hands", "Legs"],
+                correctAnswer: "Nose"
+            },
+            {
+                question: "Which of the following is NOT a typical manifestation of scabies?",
+                options: ["Intense pruritus", "Burrows", "Pustules", "Scales"],
+                correctAnswer: "Scales"
+            },
+            {
+                question: "What is the term for a tunnel in the skin caused by a parasite?",
+                options: ["Fissure", "Erosion", "Burrow", "Ulcer"],
+                correctAnswer: "Burrow"
+            },
+            {
+                question: "Which of the following is a characteristic of lichen planus?",
+                options: ["Primarily affects children", "Caused by viral infection", "Violaceous, flat-topped papules", "Typically occurs on sun-exposed areas"],
+                correctAnswer: "Violaceous, flat-topped papules"
+            },
+            {
+                question: "What is the most common type of skin cancer in dark-skinned individuals?",
+                options: ["Basal cell carcinoma", "Squamous cell carcinoma", "Melanoma", "Merkel cell carcinoma"],
+                correctAnswer: "Squamous cell carcinoma"
+            },
+            {
+                question: "Which of the following is NOT a typical manifestation of herpes zoster (shingles)?",
+                options: ["Unilateral distribution", "Painful rash", "Vesicles", "Scaling"],
+                correctAnswer: "Scaling"
+            },
+            {
+                question: "What is the term for thinning of the skin with loss of normal skin markings?",
+                options: ["Lichenification", "Atrophy", "Induration", "Maceration"],
+                correctAnswer: "Atrophy"
+            },
+            {
+                question: "Which of the following is a characteristic of vitiligo?",
+                options: ["Hyperpigmented patches", "Primarily affects older adults", "Caused by loss of melanocytes", "Typically occurs on non-sun-exposed areas"],
+                correctAnswer: "Caused by loss of melanocytes"
+            },
+            {
+                question: "What is the most common type of cutaneous lupus erythematosus?",
+                options: ["Acute cutaneous lupus", "Subacute cutaneous lupus", "Chronic cutaneous lupus", "Neonatal lupus"],
+                correctAnswer: "Chronic cutaneous lupus"
+            },
+            {
+                question: "Which of the following is NOT a typical manifestation of dermatomyositis?",
+                options: ["Gottron's papules", "Heliotrope rash", "Shawl sign", "Butterfly rash"],
+                correctAnswer: "Butterfly rash"
+            },
+            {
+                question: "What is the term for softening and breakdown of skin due to excessive moisture?",
+                options: ["Lichenification", "Atrophy", "Induration", "Maceration"],
+                correctAnswer: "Maceration"
+            },
+            {
+                question: "Which of the following is a characteristic of pyoderma gangrenosum?",
+                options: ["Primarily affects children", "Caused by bacterial infection", "Painful, rapidly progressing ulcers", "Typically occurs on sun-exposed areas"],
+                correctAnswer: "Painful, rapidly progressing ulcers"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedAnswer = null;
+
+        function renderQuestion() {
+            const quizContent = document.getElementById('quiz-content');
+            const question = quizQuestions[currentQuestion];
+
+            let html = `
+                <div class="question">
+                    <h2>Question ${currentQuestion + 1}/${quizQuestions.length}</h2>
+                    <p>${question.question}</p>
+                </div>
+                <div class="options">
+                    ${question.options.map((option, index) => `
+                        <button onclick="selectAnswer('${option}')">${option}</button>
+                    `).join('')}
+                </div>
+            `;
+
+            quizContent.innerHTML = html;
+        }
+
+        function selectAnswer(answer) {
+            selectedAnswer = answer;
+            const buttons = document.querySelectorAll('.options button');
+            buttons.forEach(button => {
+                button.disabled = true;
+                if (button.textContent === answer) {
+                    if (answer === quizQuestions[currentQuestion].correctAnswer) {
+                        button.classList.add('correct');
+                        score++;
+                    } else {
+                        button.classList.add('incorrect');
+                    }
+                }
+            });
+
+            const nextButton = document.createElement('button');
+            nextButton.textContent = currentQuestion === quizQuestions.length - 1 ? 'Finish Quiz' : 'Next Question';
+            nextButton.style.marginTop = '20px';
+            nextButton.style.width = '100%';
+            nextButton.onclick = nextQuestion;
+            document.getElementById('quiz-content').appendChild(nextButton);
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < quizQuestions.length) {
+                renderQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            const quizContent = document.getElementById('quiz-content');
+            quizContent.innerHTML = `
+                <div class="result">
+                    You scored ${score} out of ${quizQuestions.length}
+                </div>
+                <button onclick="restartQuiz()" style="margin-top: 20px; width: 100%;">Restart Quiz</button>
+            `;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            selectedAnswer = null;
+            renderQuestion();
+        }
+
+        renderQuestion();
+    </script>
+</body>
+</html>
